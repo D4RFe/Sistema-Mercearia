@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+Homepage
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <div class="icones">
+        <a href="{% url 'sistema:caixa' %}">
+            <img class="img-sm" src="{% static 'images/caixa.png' %}" title="CAIXA">
+        </a>
+        <a href="{% url 'sistema:estoque' %}">
+            <img class="img-sm" src="{% static 'images/estoque.jpg' %}" title="ESTOQUE">
+        </a>
+        <a href="{% url 'sistema:relatorios' %}">
+            <img class="img-sm" src="{% static 'images/relatorio.png' %}" title="RELATÓRIOS">
+        </a>
+        <a href="{% url 'sistema:vendas' %}">
+            <img class="img-sm" src="{% static 'images/vendas.png' %}" title='VENDAS'>
+        </a>
+        <a href="{% url 'sistema:clientes' %}">
+            <img class="img-sm" src="{% static 'images/clientes.webp' %}" title='CLIENTES'>
+        </a>
+        <a href="{% url 'sistema:fornecedores' %}">
+            <img class="img-sm" src="{% static 'images/fornecedores.jpeg' %}" title='FORNECEDORES'>
+        </a>
+        <a href="{% url 'sistema:entradaDeNotas' %}">
+            <img class="img-sm" src="{% static 'images/entradaMercadorias.jpeg' %}" title='ENTRADA DE MERCADORIAS'>
+        </a>
+    </div>
+</div>
+{% endblock %}

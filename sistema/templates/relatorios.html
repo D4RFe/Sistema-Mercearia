@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block titulo %}
+Relatórios
+{% endblock %}
+
+{% block content %}
+
+<div class='main'>
+
+    <div class='busca-data'>
+        <h1>Filtre seus resultados pelas datas de início e fim</h1>
+        <form method='post'>
+            {% csrf_token %}
+        <label class="label-relatorios" for="iddatainicio">Data Inicial</label>
+        <input class="input-data" id='iddatainicio' name='datainicio' type="date" required>
+        <label class="label-relatorios" for="iddatafinal">Data Final</label>
+        <input class='input-data' id='iddatafinal' name='datafinal' type="date" required><br>
+        <label class="label-relatorios" for="idrelatorio">Escolha o tipo de relatório</label>
+        <select class="input-data2" name='relatorio' id='idrelatorio'>
+            <option class="input-data" value="relatorio-vendas">Relatório de Vendas</option>
+            <option class="input-data" value="relatorio-caixa">Relatório de Caixa</option>
+            <option class="input-data" value="relatorio-mercadorias">Relatório de Entrada de Mercadorias</option>
+        </select>
+        <button type="submit" class="btn-add">BUSCAR</button>
+        </form>
+    </div>
+
+    <div style='background-color: black; height:2px; margin-top:20px; margin-bottom:20px;'>
+    </div>
+
+    <div class='resultado-relatorios'>
+        {% for relatorio in lista_relatorios_caixa %}
+        <div class="relatorio-capa">
+            <a href="{% url 'sistema:relatoriocaixa' relatorio.3 %}" class="item-capa-relatorio">
+            <span class='item-capa-relatorio'>Data <br>{{ relatorio.0 }}</span><br>
+            <div style='background-color: black; height:2px; margin-top:20px; margin-bottom:20px;'>
+            </div>
+            <span class='item-capa-relatorio'>Valor Sistema<br> R$ {{ relatorio.1|floatformat:"2" }}</span><br>
+            <div style='background-color: black; height:2px; margin-top:20px; margin-bottom:20px;'>
+            </div>
+            <span class='item-capa-relatorio'>Valor Caixa<br> R$ {{ relatorio.2|floatformat:"2" }}</span>
+            </a>
+        </div>
+        {% endfor %}
+        {% for relatorio in lista_relatorios_venda %}
+        <div class="relatorio-capa">
+            <a href="{% url 'sistema:relatorio_vendas' relatorio.2 %}" class="item-capa-relatorio">
+            <span class='item-capa-relatorio'>Data <br> <br>{{ relatorio.0 }}</span><br>
+            <div style='background-color: black; height:2px; margin-top:20px; margin-bottom:20px;'>
+            </div>
+            <span class='item-capa-relatorio'>Valor <br> <br> R$ {{ relatorio.1|floatformat:"2" }}</span>
+            </a>
+        </div>
+        {% endfor %}
+
+        {% for relatorio in lista_relatorios_mercadorias %}
+        <div class="relatorio-capa">
+            <a href="{% url 'sistema:relatoriofornecedor' relatorio.3 %}" class="item-capa-relatorio">
+            <span class='item-capa-relatorio'>Data <br> <br>{{ relatorio.0 }}</span><br>
+            <div style='background-color: black; height:2px; margin-top:20px; margin-bottom:20px;'>
+            </div>
+            <span class='item-capa-relatorio'>Valor <br> <br> R$ {{ relatorio.1|floatformat:"2" }}</span>
+            <span class='item-capa-relatorio'>Fornecedor <br> <br> R$ {{ relatorio.2 }}</span>
+            </a>
+        </div>
+        {% endfor %}
+        
+    </div>
+
+    
+<div>
+
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block titulo %}
+Relatório de Caixa
+{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div id="error-message" class="{% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}" style="display: none;">             
+                    <span>{{ message }}<span>
+        </div>
+        {% endfor %}
+{% endif %}
+
+<div class='main'>
+
+    <div class='tabela-soma-caixa'>
+        <form method='post'>
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <th>Quantidade de cédulas/moedas</th>
+                    <th>Valor</th>
+                    <th>Valor total</th>
+                </tr>
+                <tr>
+                    <td><input type="number" name="5-cent" required value="{{ cent5_quantity|default_if_none:0 }}"></td>
+                    <td>R$ 0,05</td>
+                    <td>R$ {{ cent5_total|floatformat:"2" }}</td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="10-cent" required value="{{ cent10_quantity|default_if_none:0 }}"></td>
+                    <td>R$ 0,10</td>
+                    <td>R$ {{ cent10_total|floatformat:"2" }}</td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="25-cent" required value="{{ cent25_quantity|default_if_none:0 }}"></td>
+                    <td>R$ 0,25</td>
+                    <td>R$ {{ cent25_total|floatformat:"2" }}</td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="50-cent" required value="{{ cent50_quantity|default_if_none:0 }}"></td>
+                    <td>R$ 0,50</td>
+                    <td>R$ {{ cent50_total|floatformat:"2" }}</td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="1-real" required value="{{ real1_quantity|default_if_none:0 }}"></td>
+                    <td>R$ 1,00</td>
+                    <td>R$ {{ real1_total|floatformat:"2" }}</td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="2-real" required value="{{ real2_quantity|default_if_none:0 }}"></td>
+                    <td>R$ 2,00</td>
+                    <td>R$ {{ real2_total|floatformat:"2" }}</td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="5-real" required value="{{ real5_quantity|default_if_none:0 }}"></td>
+                    <td>R$ 5,00</td>
+                    <td>R$ {{ real5_total|floatformat:"2" }}</td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="10-real" required value="{{ real10_quantity|default_if_none:0 }}"></td>
+                    <td>R$ 10,00</td>
+                    <td>R$ {{ real10_total|floatformat:"2" }}</td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="20-real" required value="{{ real20_quantity|default_if_none:0 }}"></td>
+                    <td>R$ 20,00</td>
+                    <td>R$ {{ real20_total|floatformat:"2" }}</td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="50-real" required value="{{ real50_quantity|default_if_none:0 }}"></td>
+                    <td>R$ 50,00</td>
+                    <td>R$ {{ real50_total|floatformat:"2" }}</td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="100-real" required value="{{ real100_quantity|default_if_none:0 }}"></td>
+                    <td>R$ 100,00</td>
+                    <td>R$ {{ real100_total|floatformat:"2" }}</td>
+                </tr>
+            </table>
+            
+            
+        <button type="submit" value="calcula-valor" name="confirm" class='btn-calc'>Calcular </button>
+        <button onclick="mostrarSaidaEntrada(event)" class='btn-back' style="width:200px;">Informar saída ou entrada </button>
+    </form>
+    </div>
+        <div>
+            <table>
+                <tr>
+                    <th>Valor do Sistema<th>Valor em caixa<th>Valor em cartões/PIX<th>Saldo final 
+                </tr>
+                <!-- for produto in produtos -->
+                <tr>
+                    <td> R$ {{ relatorio.valorSistema|floatformat:"2" }}
+                    <td> R$ {{ relatorio.valorCaixa|floatformat:"2" }}
+                    <td> R$ {{ relatorio.valorCartao|floatformat:"2" }}
+                    <td> R$ {{ relatorio.saldoFinal|floatformat:"2" }}
+                    
+    
+                </tr>
+    
+            </table>
+            <div class="aviso-caixa">
+                <p>O saldo acima é referente aos valores de entradas e saídas do dia de hoje somente</p>
+            </div>
+        </div>
+        <div class='resultado-soma-caixa'>
+            
+            <button type="button" class='btn-back'><a href="{% url 'sistema:homepage' %}">Voltar a página inicial</a></button>
+        </div>
+    </div>
+
+</div>
+<div id="oculta" class="ocultar">
+<div style='background-color: black; height:2px; margin-top:10px; margin-bottom:10px;'>
+</div>
+<div class="saida-caixa">
+    
+    <form method="post" autocomplete="off">
+        {% csrf_token %}
+        <label class="label-vendas" for="iddescricao-saida">Descrição</label>
+        <input class="input-produto" type="text" name="descricao-saida" id='iddescricao-saida' placeholder="Informe a descrição da saída" required><br>
+        <label class="label-vendas" for="idvalor-saida">Valor</label>
+        <input class="input" type="text" name="valor-saida" id="idvalor-saida" placeholder="Informe o valor" required><br>
+        <button type="submit" name="confirm" value="confirm-exit" class="btn-del" style="width: 200px;">Confirmar saída</button>
+    </form>
+    <form method='post' autocomplete="off">
+        {% csrf_token %}
+        <label class="label-vendas" for="iddescricao-entrada">Descrição</label>
+        <input class="input-produto" type="text" name="descricao-entrada" id='iddescricao-entrada' placeholder="Informe a descrição da entrada" required><br>
+        <label class="label-vendas" for="idvalor-saida">Valor</label>
+        <input class="input" type="text" name="valor-entrada" id="idvalor-entrada" placeholder="Informe o valor" required><br>
+        <button type="submit" name="confirm" value="confirm-deposit" class="btn-calc">Confirmar entrada</button>
+    </form>
+</div>
+</div>
+    
+<div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block titulo %}
+Estoque
+{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div id="error-message" class="{% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}" style="display: none;">             
+                    <span>{{ message }}<span>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if lista_de_produtos_qtde_minima|length > 0 %}
+    <div id="error-quantity" class="alert-danger" style="margin: 20px;">             
+        {% for produto in lista_de_produtos_qtde_minima %}
+            <p>O produto {{ produto.nome }} (Código {{ produto.id }}) está com pouco estoque, restando apenas {{ produto.quantidade }} unidades!</p>
+        {% endfor %}
+
+        <button onclick="fechaAvisoProduto()" class="btn btn-sm btn-warning">Fechar</button>
+    </div>
+{% endif %}
+
+<div>
+    <div class="busca-add-produto">
+        <a href="{% url "sistema:cadastrarProduto" %}">
+        <div>
+            <button type="button" class="add-produto">CADASTRAR PRODUTO</button>
+        </div>
+        </a>
+        
+        <div class="buscar-produto">
+            <form method='post'>
+                {% csrf_token %}
+                <input type="text" name="busca-produto" id='idbusca-produto' placeholder="Busque pelo produto ou grupo desejado" class='input-produto'> 
+                <button type="submit" class='btn-add'>BUSCAR</button>
+            </form>
+        </div>
+    </div>
+    
+    <div style='background-color: black; height:2px; margin-top:10px; margin-bottom:10px;'>
+    </div>
+
+    <div class='exibe-produtos'>
+        <table>
+            <tr>
+                <th>PRODUTO<th>GRUPO<th>QUANTIDADE EM ESTOQUE <th>PREÇO DE VENDA <th>PREÇO DE CUSTO<th>CÓDIGO PRODUTO <th> CLIQUE AQUI PARA EDITAR
+            </tr>
+            {% for produto in object_list %}
+            <tr>
+                <td class="produto-tabela"> {{ produto.nome }}
+                <td> {{ produto.grupo }}
+                <td> {{ produto.quantidade }} unidades
+                <td> {{ produto.valor_venda }}
+                <td> {{ produto.valor_custo }}
+                <td> {{ produto.id }}
+                <td>
+                <a href="{% url "sistema:editarProduto" produto.id %}">
+                    <div>
+                        <button type="button" class="add-produto">EDITAR PRODUTO</button>
+                    </div>
+                </a>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    
+<div>
+
+{% endblock %}

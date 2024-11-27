@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block titulo %}
+Relatório de Vendas
+{% endblock %}
+
+{% block content %}
+
+
+
+<div>
+    <div style="height: 50px;">
+    </div>
+    <h1 class="title-report-store-cashier">Relatório referente ao dia {{ data }}</h1>
+    <table>
+        <tr>
+            <th style="width: 300px;">DESCRIÇÃO <th style="width: 150px;">CRÉDITO
+        </tr>
+        {% for venda in object.vendas.all %}
+        <tr>
+            <th>{{ venda }} <th>R$ {{ venda.valor|floatformat:"2" }}
+        </tr>
+        {% endfor %}
+        <tr>
+            <th>VALOR TOTAL <th>R$ {{ object.valorfinal|floatformat:"2" }}
+        </tr>
+    </table>
+    <div class="div-botao-voltar">
+        <a href="{% url 'sistema:relatorios' %}">
+        <button class="btn-voltar">
+            VOLTAR
+        </button>
+    </a>
+    </div>
+</div>
+
+{% endblock %}

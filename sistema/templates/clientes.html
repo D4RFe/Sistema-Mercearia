@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block titulo %}
+Clientes
+{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div id="error-message" class="{% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}" style="display: none;">             
+                    <span>{{ message }}<span>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="container">
+    <div class="row">
+        <div id="opcoes-cliente" class="col-md-4 p-3 m-3">
+            <div class="">
+                <button class="btn btn-success mb-5" style="width: 200px; height:75px; font-size:1.3em;" onclick="exibeCadastro()">Cadastrar Cliente</button>
+            </div>
+            <div>
+                <button class="btn btn-primary mb-5" style="width: 200px; height:75px;font-size:1.3em;" onclick="exibeEditarCadastro()">Editar Cliente</button>
+            </div>
+            <div>
+                <button class="btn btn-warning mb-5" style="width: 200px; height:75px;font-size:1.3em;" onclick="exibeCliente()">Visualizar Cliente</button>
+            </div>
+        </div>
+    </div>
+    <div id="informacoes-cliente" class="col-md-8 p-2 m-2">
+        <div id="tabelaDeClientes" style="display: none;">
+            <input type="text" id="clienteNome" placeholder="Informe o nome do cliente" class="form-control mb-2">
+            <table id="tabelaClientes" class="table table-striped">
+                <thead>
+                    
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>  
+
+
+        <form id="formEditar" style="display:none;" method="post">
+            
+            <input type="text" id="clienteEditarNome" placeholder="Informe o nome do cliente" class="form-control mb-2">
+            <table id="tabelaEdicaoClientes" class="table table-striped">
+                <thead>
+                    
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            
+            {% csrf_token %}
+            <h1 class="fs-2">Editar Cliente</h1>
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nomeEdit" name="nome" required>
+                <label for="rua" class="form-label">Rua</label>
+                <input type="text" class="form-control" id="ruaEdit" name="rua" required>
+                <label for="bairro" class="form-label">Bairro</label>
+                <input type="text" class="form-control" id="bairroEdit" name="bairro" required>
+                <label for="cidade" class="form-label">Cidade</label>
+                <input type="text" class="form-control" id="cidadeEdit" name="cidade" required>
+                <label for="cpf" class="form-label">CPF/CNPJ</label>
+                <input type="text" class="form-control" id="cpfEdit" name="cpf" pattern="\d{11, 14}" maxlength="14" required title="Por favor, insira apenas dígitos." placeholder="Insira apenas números">
+                <label for="telefone" class="form-label">Telefone</label>
+                <input type="text" class="form-control" id="telefoneEdit" name="telefone" pattern="\d{8,20}" maxlength="20" required title="Por favor, insira apenas dígitos.">
+                <label for="cpf" class="form-label">E-mail</label>
+                <input type="email" class="form-control" id="emailEdit" name="email" required>
+                <input type="hidden" id="idCliente" name="idCliente">
+                <div class="d-flex justify-content-between">
+                    <button type="submit" name="btnSubmit" value="atualizarCliente" class="btn btn-primary btn-lg mt-2">Atualizar Cliente</button>
+                    <button type="submit" name="btnSubmit" value="deletarCliente" class="btn btn-danger btn-lg mt-2">Excluir Cliente</button>
+                </div>
+            </div>
+        </form>
+            
+            <form id="formCadastro" style="display:none;" method="post">
+                {% csrf_token %}
+                <h1 class="fs-2">Cadastrar Cliente</h1>
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="nome" name="nomeadd" required>
+                    <label for="rua" class="form-label">Rua</label>
+                    <input type="text" class="form-control" id="rua" name="ruaadd" required>
+                    <label for="bairro" class="form-label">Bairro</label>
+                    <input type="text" class="form-control" id="bairro" name="bairroadd" required>
+                    <label for="cidade" class="form-label">Cidade</label>
+                    <input type="text" class="form-control" id="cidade" name="cidadeadd" required>
+                    <label for="cpf" class="form-label">CPF/CNPJ</label>
+                    <input type="text" class="form-control" id="cpf" name="cpfadd" pattern="\d{11,14}" maxlength="14" required title="Por favor, insira apenas dígitos." placeholder="Insira apenas números">
+                    <label for="telefone" class="form-label">Telefone</label>
+                    <input type="text" class="form-control" id="telefone" name="telefoneadd" pattern="\d{8,20}" maxlength="20" required title="Por favor, insira apenas dígitos sendo no mínimo 8.">
+                    <label for="cpf" class="form-label">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="emailadd" required>
+                    <button type="submit" name="btnSubmit" value="cadastrarCliente" class="btn btn-success btn-lg mt-2">Cadastrar Cliente</button>
+                </div>
+            </form>
+</div>
+
+
+<script>
+    let clientes = JSON.parse('{{ clientes|safe }}')
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="{% static 'js/clientes.js' %}"></script>
+{% endblock %}
